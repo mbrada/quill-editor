@@ -13,6 +13,7 @@ import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.dependency.NpmPackage;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.page.PendingJavaScriptResult;
 import com.vaadin.flow.dom.DisabledUpdateMode;
 import com.vaadin.flow.function.SerializableConsumer;
 
@@ -43,19 +44,19 @@ public class QuillEditorComponent extends Component implements HasComponents, Qu
      * If no property have been configured through the {@link QuillToolbarConfigurator}
      * methods, the editor will be initialized including all the features of the toolbar.
      */
-    public void initEditor(){
+    public void initEditor() {
         this.removeAll();
         editor = new Div();
         editor.setId("editor-quill");
         add(editor);
-        this.getElement().executeJs("$0.initEditor($1)",this, editor.getElement());
+        this.getElement().executeJs("$0.initEditor($1)", this, editor.getElement());
     }
 
     @ClientCallable(DisabledUpdateMode.ALWAYS)
     private void setHtml(String htmlContent) {
         final String noNewLineCharacter = htmlContent.replaceAll("\n", "");
         final String oldContent = this.htmlContent;
-        if(!Objects.equals(oldContent, noNewLineCharacter)){
+        if (!Objects.equals(oldContent, noNewLineCharacter)) {
             this.htmlContent = noNewLineCharacter;
             this.fireEvent(new QuillValueChangeNotifier.QuillValueChangeEvent(this, noNewLineCharacter));
         }
@@ -65,9 +66,9 @@ public class QuillEditorComponent extends Component implements HasComponents, Qu
      * Returns the editor's content in HTML format.
      *
      * @return a {@link String} instance of the current editor content
-     *      in HTML format.
+     * in HTML format.
      */
-    public String getHtmlContent(){
+    public String getHtmlContent() {
         return htmlContent;
     }
 
@@ -76,16 +77,33 @@ public class QuillEditorComponent extends Component implements HasComponents, Qu
      * HTML content will be ignored and removed from the editor.
      *
      * @param htmlContent a {@link String} instance of the content in HTML format
-     *                   that should appear on the editor.
+     *                    that should appear on the editor.
      */
-    public void setHtmlContent(String htmlContent){
+    public void setHtmlContent(String htmlContent) {
         final String oldContent = this.htmlContent;
-        if(!Objects.equals(oldContent, htmlContent)){
+        if (!Objects.equals(oldContent, htmlContent)) {
             this.htmlContent = htmlContent;
             runBeforeClientResponse(ui -> {
-                editor.getElement().executeJs("$0.setHtml($1)", this,  htmlContent);
+                editor.getElement().executeJs("$0.setHtml($1)", this, htmlContent);
             });
         }
+    }
+
+    public void format(final String name, final String value) {
+        this.getElement().executeJs("$0.format($1,$2)", this, name, value);
+    }
+
+    /**
+     * @param index
+     * @param text
+     * @param source "api", "user" or "silent"
+     */
+    public void insertText(int index, String text, String source) {
+        this.getElement().executeJs("$0.insertText($1,$2,$3)", this, index, text, source);
+    }
+
+    public void appendText(String text, String source) {
+        this.getElement().executeJs("$0.appendText($1,$2)", this, text, source);
     }
 
     private void runBeforeClientResponse(SerializableConsumer<UI> command) {

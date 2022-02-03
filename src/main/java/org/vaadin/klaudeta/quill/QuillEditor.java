@@ -41,9 +41,9 @@ public class QuillEditor extends AbstractCompositeField<Div, QuillEditor, String
     @Override
     public void clear() {
         super.clear();
-        if(isReadOnly()){
+        if (isReadOnly()) {
             htmlContent.getElement().removeProperty("innerHTML");
-        }else{
+        } else {
             quillEditorComponent.setHtmlContent(null);
         }
     }
@@ -62,9 +62,9 @@ public class QuillEditor extends AbstractCompositeField<Div, QuillEditor, String
     public void setInvalid(boolean invalid) {
         this.invalid = invalid;
         errorMessageLabel.setVisible(invalid);
-        if(errorMessageLabel.isVisible()){
+        if (errorMessageLabel.isVisible()) {
             quillEditorComponent.setHeight("80%");
-        }else {
+        } else {
             quillEditorComponent.setHeight("90%");
         }
     }
@@ -81,19 +81,27 @@ public class QuillEditor extends AbstractCompositeField<Div, QuillEditor, String
 
     }
 
-    private void _setValueBasedOnReadOnly(String value, boolean isReadOnly){
-        if(isReadOnly){
+    private void _setValueBasedOnReadOnly(String value, boolean isReadOnly) {
+        if (isReadOnly) {
             htmlContent.setVisible(true);
             htmlContent.getElement().setProperty("innerHTML", getValue());
             quillEditorComponent.setVisible(false);
-        }else {
+        } else {
             quillEditorComponent.setVisible(true);
             quillEditorComponent.setHtmlContent(getValue());
             htmlContent.setVisible(false);
         }
     }
 
-    public QuillToolbarConfigurator getToolbarConfigurator(){
+    public void insertText(int index, String text, String source) {
+        quillEditorComponent.insertText(index, text, source);
+    }
+
+    public void appendText(String text, String source) {
+        quillEditorComponent.appendText(text, source);
+    }
+
+    public QuillToolbarConfigurator getToolbarConfigurator() {
         return quillEditorComponent;
     }
 

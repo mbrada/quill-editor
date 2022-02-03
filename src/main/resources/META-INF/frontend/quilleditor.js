@@ -1,4 +1,4 @@
-import { LitElement, html, css } from "lit-element";
+import {LitElement, html, css} from "lit-element";
 import Quill from 'quill';
 
 const Parchment = Quill.import('parchment');
@@ -30,7 +30,7 @@ const SizeStyle = Quill.import('attributors/style/size');
 Quill.register(SizeStyle, true);
 
 class IndentAttributor extends Parchment.Attributor.Style {
-    add (node, value) {
+    add(node, value) {
         if (value === 0) {
             this.remove(node)
             return true
@@ -41,7 +41,7 @@ class IndentAttributor extends Parchment.Attributor.Style {
 }
 
 
-class QuillEditor extends LitElement{
+class QuillEditor extends LitElement {
 
     static get styles() {
         return css`
@@ -70,7 +70,7 @@ class QuillEditor extends LitElement{
         }
     }
 
-    constructor(){
+    constructor() {
         super();
         this.withFontDecorators = true;
         this.withCodeBlocks = true;
@@ -88,16 +88,16 @@ class QuillEditor extends LitElement{
 
         this.fontDecorators = ['bold', 'italic', 'underline', 'strike'];
         this.codeBlocks = ['blockquote', 'code-block'];
-        this.mainHeaders = [{ 'header': 1 }, { 'header': 2 }];
-        this.lists = [{ 'list': 'ordered'}, { 'list': 'bullet' }];
-        this.scripts = [{ 'script': 'sub'}, { 'script': 'super' }];
-        this.indents = [{ 'indent': '-1'}, { 'indent': '+1' }];
-        this.directions = [{ 'direction': 'rtl' }];
-        this.sizes = [{ 'size': ['10px', false, '18px', '32px'] }];
-        this.headers = [{ 'header': [1, 2, 3, 4, 5, 6, false] }];
-        this.colors = [{ 'color': [] }, { 'background': [] }];
-        this.fonts =  [{ 'font': [] }];
-        this.aligns = [{ 'align': [] }];
+        this.mainHeaders = [{'header': 1}, {'header': 2}];
+        this.lists = [{'list': 'ordered'}, {'list': 'bullet'}];
+        this.scripts = [{'script': 'sub'}, {'script': 'super'}];
+        this.indents = [{'indent': '-1'}, {'indent': '+1'}];
+        this.directions = [{'direction': 'rtl'}];
+        this.sizes = [{'size': ['10px', false, '18px', '32px']}];
+        this.headers = [{'header': [1, 2, 3, 4, 5, 6, false]}];
+        this.colors = [{'color': []}, {'background': []}];
+        this.fonts = [{'font': []}];
+        this.aligns = [{'align': []}];
         this.cleanFormat = ['clean'];
 
         this.toolbarOptions = [
@@ -115,56 +115,56 @@ class QuillEditor extends LitElement{
 
     }
 
-    render(){
+    render() {
         return html`
             <slot>
             </slot>
         `
     }
 
-    initEditor(element){
-        if(element == null){
+    initEditor(element) {
+        if (element == null) {
             return;
         }
         let options = [];
 
-        if(this.withFontDecorators){
+        if (this.withFontDecorators) {
             options.push(this.fontDecorators);
         }
-        if(this.withCodeBlocks){
+        if (this.withCodeBlocks) {
             options.push(this.codeBlocks);
         }
-        if(this.withMainHeaders){
+        if (this.withMainHeaders) {
             options.push(this.mainHeaders);
         }
-        if(this.withLists){
+        if (this.withLists) {
             options.push(this.lists);
         }
-        if(this.withScripts){
+        if (this.withScripts) {
             options.push(this.scripts);
         }
-        if(this.withIndents){
+        if (this.withIndents) {
             options.push(this.indents);
         }
-        if(this.withDirections){
+        if (this.withDirections) {
             options.push(this.directions);
         }
-        if(this.withSizes){
+        if (this.withSizes) {
             options.push(this.sizes);
         }
-        if(this.withHeaders){
+        if (this.withHeaders) {
             options.push(this.headers);
         }
-        if(this.withColors){
+        if (this.withColors) {
             options.push(this.colors);
         }
-        if(this.withFonts){
+        if (this.withFonts) {
             options.push(this.fonts);
         }
-        if(this.withAligns){
+        if (this.withAligns) {
             options.push(this.aligns);
         }
-        if(this.withCleanFormat){
+        if (this.withCleanFormat) {
             options.push(this.cleanFormat);
         }
 
@@ -178,7 +178,7 @@ class QuillEditor extends LitElement{
 
         const thisThat = this;
 
-        this.quillEditor.on('text-change', function(delta, oldDelta, source) {
+        this.quillEditor.on('text-change', function (delta, oldDelta, source) {
             thisThat.$server.setHtml(thisThat.quillEditor.root.innerHTML);
         });
 
@@ -191,6 +191,20 @@ class QuillEditor extends LitElement{
     setHtml(htmlContent) {
         this.quillEditor.root.innerHTML = htmlContent;
     }
+
+    format(name, value) {
+        this.quillEditor.format(name, value);
+    }
+
+    insertText(index, text, source) {
+        this.quillEditor.insertText(index, text, source);
+    }
+
+    appendText(text, source) {
+        this.quillEditor.insertText(this.quillEditor.getLength() - 1, text, source);
+    }
+
+
 }
 
 customElements.define('quill-editor', QuillEditor);
