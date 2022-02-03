@@ -204,6 +204,19 @@ class QuillEditor extends LitElement {
         this.quillEditor.insertText(this.quillEditor.getLength() - 1, text, source);
     }
 
+    addKeyEventHandler(key, ctrl, shift, alt, hashKey) {
+        const thisThat = this;
+
+
+        this.quillEditor.keyboard.addBinding({key: key, ctrlKey: ctrl, shiftKey: shift, altKey: alt}, function(range) {
+            thisThat.$server.keyHandler(hashKey);
+
+            // I will normally prevent handlers of the tab key
+            // Return true to let later handlers be called
+            return false;
+        });
+    }
+
 
 }
 

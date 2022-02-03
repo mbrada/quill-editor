@@ -1,21 +1,16 @@
 package org.vaadin.klaudeta.quill;
 
-import java.util.Objects;
-
-import com.vaadin.flow.component.ClientCallable;
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.HasComponents;
-import com.vaadin.flow.component.HasSize;
-import com.vaadin.flow.component.HasStyle;
-import com.vaadin.flow.component.Tag;
-import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.dependency.NpmPackage;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.page.PendingJavaScriptResult;
 import com.vaadin.flow.dom.DisabledUpdateMode;
 import com.vaadin.flow.function.SerializableConsumer;
+
+import java.util.HashMap;
+import java.util.Objects;
+import java.util.UUID;
 
 /**
  * A custom RichText editor component for Flow using Quill library.
@@ -109,6 +104,43 @@ public class QuillEditorComponent extends Component implements HasComponents, Qu
     private void runBeforeClientResponse(SerializableConsumer<UI> command) {
         getElement().getNode().runWhenAttached(ui -> ui
                 .beforeClientResponse(this, context -> command.accept(ui)));
+    }
+
+    private HashMap<String, QuillKeyEventHandler> keyHandlersMap = new HashMap<>();
+
+    @ClientCallable(DisabledUpdateMode.ONLY_WHEN_ENABLED)
+    private void keyHandler(final String hash) {
+        final QuillKeyEventHandler handler = keyHandlersMap.get(hash);
+
+        if (handler != null) {
+            handler.handle();
+        }
+    }
+
+    public void removeBinding(String uuid) {
+        keyHandlersMap.remove(uuid);
+    }
+
+    /**
+     * Return binding UUID
+     *
+     * @param key
+     * @param ctrl
+     * @param shift
+     * @param alt
+     * @param eventHandler
+     * @return
+     */
+    public String addBinding(String key, boolean ctrl, boolean shift, boolean alt, QuillKeyEventHandler eventHandler) {
+        final String uuid = UUID.randomUUID().toString();
+
+        keyHandlersMap.put(uuid, eventHandler);
+
+        runBeforeClientResponse(ui -> {
+            editor.getElement().executeJs("$0.addKeyEventHandler($1, $2, $3, $4, $5)", this, key, ctrl, shift, alt, uuid);
+        });
+
+        return uuid;
     }
 
 }

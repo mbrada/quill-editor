@@ -3,7 +3,6 @@ package org.vaadin.klaudeta.quill;
 import com.vaadin.flow.component.HasElement;
 
 public interface QuillToolbarConfigurator extends HasElement {
-
     String fontDecorators = "withFontDecorators";
     String codeBlocks = "withCodeBlocks";
     String mainHeaders = "withMainHeaders";
@@ -17,6 +16,7 @@ public interface QuillToolbarConfigurator extends HasElement {
     String fonts = "withFonts";
     String aligns = "withAligns";
     String cleanFormats = "withCleanFormats";
+
 
 
     /**
