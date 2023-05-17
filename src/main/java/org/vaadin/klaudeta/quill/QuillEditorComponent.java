@@ -101,6 +101,18 @@ public class QuillEditorComponent extends Component implements HasComponents, Qu
         this.getElement().executeJs("$0.appendText($1,$2)", this, text, source);
     }
 
+    public void deleteText(int index, int length, String source) {
+        this.getElement().executeJs("$0.deleteText($1,$2,$3)", this, index, length, source);
+    }
+
+    public void setText(String text, String source) {
+        this.getElement().executeJs("$0.setText($1,$2)", this, text, source);
+    }
+
+    public void focus() {
+        this.getElement().executeJs("$0.focus()", this);
+    }
+
     private void runBeforeClientResponse(SerializableConsumer<UI> command) {
         getElement().getNode().runWhenAttached(ui -> ui
                 .beforeClientResponse(this, context -> command.accept(ui)));

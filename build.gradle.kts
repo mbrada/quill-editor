@@ -33,13 +33,13 @@ repositories {
 }
 
 dependencies {
-    implementation("com.vaadin:vaadin-core:14.8.1")
+    implementation("com.vaadin:vaadin-core:23.3.6")
     testImplementation("org.slf4j:slf4j-simple:1.7.32")
 }
 
 val groupLibrary = "cz.miloslavbrada.vaadin"
 val artifactIdLibrary = "quill-editor"
-val versionLibrary = "1.0.7"
+val versionLibrary = "1.0.9"
 val libraryDescription = "Quill rich text editor Vaadin component by Transkript online s.r.o"
 
 java.sourceCompatibility = JavaVersion.VERSION_1_8
