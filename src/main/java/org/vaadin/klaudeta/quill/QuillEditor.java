@@ -101,6 +101,19 @@ public class QuillEditor extends AbstractCompositeField<Div, QuillEditor, String
         quillEditorComponent.appendText(text, source);
     }
 
+    public void deleteText(int index, int length, String source) {
+        quillEditorComponent.deleteText(index, length, source);
+    }
+
+    public void setText(String text, String source) {
+        quillEditorComponent.setText(text, source);
+    }
+
+    public void focus() {
+        quillEditorComponent.focus();
+    }
+
+
     public QuillToolbarConfigurator getToolbarConfigurator() {
         return quillEditorComponent;
     }

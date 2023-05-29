@@ -39,7 +39,7 @@ dependencies {
 
 val groupLibrary = "cz.miloslavbrada.vaadin"
 val artifactIdLibrary = "quill-editor"
-val versionLibrary = "1.0.9"
+val versionLibrary = "1.0.10"
 val libraryDescription = "Quill rich text editor Vaadin component by Transkript online s.r.o"
 
 java.sourceCompatibility = JavaVersion.VERSION_1_8
